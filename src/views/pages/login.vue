@@ -29,15 +29,15 @@
                         </template>
                     </el-input>
                 </el-form-item>
-                <div class="pwd-tips">
-                    <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />
-                    <el-link type="primary" @click="$router.push('/reset-pwd')">忘记密码</el-link>
-                </div>
+<!--                <div class="pwd-tips">-->
+<!--                    <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />-->
+<!--                    <el-link type="primary" @click="$router.push('/reset-pwd')">忘记密码</el-link>-->
+<!--                </div>-->
                 <el-button class="login-btn" type="primary" size="large" @click="submitForm(login)">登录</el-button>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
-                <p class="login-text">
-                    没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>
-                </p>
+<!--                <p class="login-tips">Tips : 用户名和密码随便填。</p>-->
+<!--                <p class="login-text">-->
+<!--                    没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>-->
+<!--                </p>-->
             </el-form>
         </div>
     </div>
@@ -50,6 +50,9 @@ import { usePermissStore } from '@/store/permiss';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
+import {loginApi} from '@/api'
+import md5 from "md5";
+import {useUserStore} from '@/store/user'
 
 interface LoginInfo {
     username: string;
@@ -78,20 +81,30 @@ const rules: FormRules = {
 };
 const permiss = usePermissStore();
 const login = ref<FormInstance>();
+const userStore = useUserStore()
 const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate((valid: boolean) => {
         if (valid) {
+          loginApi({
+            email: param.username,
+            passWord: md5(param.password)
+          }).then(res=>{
             ElMessage.success('登录成功');
             localStorage.setItem('vuems_name', param.username);
             const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
             permiss.handleSet(keys);
+
+            userStore.setUserInfo(res.data)
+
             router.push('/');
-            if (checked.value) {
-                localStorage.setItem('login-param', JSON.stringify(param));
-            } else {
-                localStorage.removeItem('login-param');
-            }
+            // if (checked.value) {
+            //     localStorage.setItem('login-param', JSON.stringify(param));
+            // } else {
+            //     localStorage.removeItem('login-param');
+            // }
+          })
+
         } else {
             ElMessage.error('登录失败');
             return false;

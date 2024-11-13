@@ -19,6 +19,15 @@ export default defineConfig({
 	optimizeDeps: {
 		include: ['schart.js']
 	},
+	server: {
+		proxy: {
+			'/api': {
+				target: 'http://msb.free.svipss.top',
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/api/, '')
+			}
+		}
+	},
 	resolve: {
 		alias: {
 			'@': '/src',

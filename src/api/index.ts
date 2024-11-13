@@ -20,3 +20,28 @@ export const fetchRoleData = () => {
         method: 'get'
     });
 };
+
+//登录接口
+export const loginApi = (data: any) => {
+    return request({
+        url: '/scf/mis/login',
+        method: 'post',
+        data
+    });
+};
+
+//首页统计接口
+export const getStatisticsApi = () => {
+    return request({
+        url: '/scf/mis/getIndexInfo',
+        method: 'post'
+    });
+};
+//获取充值提现数据
+export const getRechargeWithdrawApi = (data: any) => {
+    return request({
+        url: '/scf/mis/getAssetRecord',
+        method: 'post',
+        data
+    });
+};

@@ -7,7 +7,7 @@
                         <User />
                     </el-icon>
                     <div class="card-content">
-                        <countup class="card-num color1" :end="6666" />
+                      <span class="card-num color1"> {{totalUser}}</span>
                         <div>平台总注册</div>
                     </div>
                 </el-card>
@@ -18,7 +18,7 @@
                         <ChatDotRound />
                     </el-icon>
                     <div class="card-content">
-                        <countup class="card-num color2" :end="168" />
+                        <span class="card-num color2">{{totalRecharge}}</span>
                         <div>总充值</div>
                     </div>
                 </el-card>
@@ -29,7 +29,7 @@
                         <Goods />
                     </el-icon>
                     <div class="card-content">
-                        <countup class="card-num color3" :end="8888" />
+                      <span class="card-num color3">{{totalWithDrawl}}</span>
                         <div>总提现</div>
                     </div>
                 </el-card>
@@ -40,7 +40,7 @@
                         <ShoppingCartFull />
                     </el-icon>
                     <div class="card-content">
-                        <countup class="card-num color4" :end="568" />
+                      <span class="card-num color4">{{todayRecharge}}</span>
                         <div>当日充值</div>
                     </div>
                 </el-card>
@@ -53,185 +53,48 @@
                 <ShoppingCartFull />
               </el-icon>
               <div class="card-content">
-                <countup class="card-num color4" :end="568" />
+                <span class="card-num color4">{{todayWithDrawl}}</span>
                 <div>当日提现</div>
               </div>
             </el-card>
           </el-col>
         </el-row>
 
-        <el-row :gutter="20" class="mgb20">
-            <el-col :span="18">
-                <el-card shadow="hover">
-                    <div class="card-header">
-                        <p class="card-header-title">订单动态</p>
-                        <p class="card-header-desc">最近一周订单状态，包括订单成交量和订单退货量</p>
-                    </div>
-                    <v-chart class="chart" :option="dashOpt1" />
-                </el-card>
-            </el-col>
-            <el-col :span="6">
-                <el-card shadow="hover">
-                    <div class="card-header">
-                        <p class="card-header-title">品类分布</p>
-                        <p class="card-header-desc">最近一个月销售商品的品类情况</p>
-                    </div>
-                    <v-chart class="chart" :option="dashOpt2" />
-                </el-card>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="7">
-                <el-card shadow="hover" :body-style="{ height: '400px' }">
-                    <div class="card-header">
-                        <p class="card-header-title">时间线</p>
-                        <p class="card-header-desc">最新的销售动态和活动信息</p>
-                    </div>
-                    <el-timeline>
-                        <el-timeline-item v-for="(activity, index) in activities" :key="index" :color="activity.color">
-                            <div class="timeline-item">
-                                <div>
-                                    <p>{{ activity.content }}</p>
-                                    <p class="timeline-desc">{{ activity.description }}</p>
-                                </div>
-                                <div class="timeline-time">{{ activity.timestamp }}</div>
-                            </div>
-                        </el-timeline-item>
-                    </el-timeline>
-                </el-card>
-            </el-col>
-            <el-col :span="10">
-                <el-card shadow="hover" :body-style="{ height: '400px' }">
-                    <div class="card-header">
-                        <p class="card-header-title">渠道统计</p>
-                        <p class="card-header-desc">最近一个月的订单来源统计</p>
-                    </div>
-                    <v-chart class="map-chart" :option="mapOptions" />
-                </el-card>
-            </el-col>
-            <el-col :span="7">
-                <el-card shadow="hover" :body-style="{ height: '400px' }">
-                    <div class="card-header">
-                        <p class="card-header-title">排行榜</p>
-                        <p class="card-header-desc">销售商品的热门榜单Top5</p>
-                    </div>
-                    <div>
-                        <div class="rank-item" v-for="(rank, index) in ranks">
-                            <div class="rank-item-avatar">{{ index + 1 }}</div>
-                            <div class="rank-item-content">
-                                <div class="rank-item-top">
-                                    <div class="rank-item-title">{{ rank.title }}</div>
-                                    <div class="rank-item-desc">销量：{{ rank.value }}</div>
-                                </div>
-                                <el-progress
-                                    :show-text="false"
-                                    striped
-                                    :stroke-width="10"
-                                    :percentage="rank.percent"
-                                    :color="rank.color"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
+
     </div>
 </template>
 
 <script setup lang="ts" name="dashboard">
 import countup from '@/components/countup.vue';
-import { use, registerMap } from 'echarts/core';
-import { BarChart, LineChart, PieChart, MapChart } from 'echarts/charts';
-import {
-    GridComponent,
-    TooltipComponent,
-    LegendComponent,
-    TitleComponent,
-    VisualMapComponent,
-} from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
-import VChart from 'vue-echarts';
-import { dashOpt1, dashOpt2, mapOptions } from './chart/options';
-import chinaMap from '@/utils/china';
-use([
-    CanvasRenderer,
-    BarChart,
-    GridComponent,
-    LineChart,
-    PieChart,
-    TooltipComponent,
-    LegendComponent,
-    TitleComponent,
-    VisualMapComponent,
-    MapChart,
-]);
-registerMap('china', chinaMap);
-const activities = [
-    {
-        content: '收藏商品',
-        description: 'xxx收藏了你的商品，就是不买',
-        timestamp: '30分钟前',
-        color: '#00bcd4',
-    },
-    {
-        content: '用户评价',
-        description: 'xxx给了某某商品一个差评，吐血啊',
-        timestamp: '55分钟前',
-        color: '#1ABC9C',
-    },
-    {
-        content: '订单提交',
-        description: 'xxx提交了订单，快去收钱吧',
-        timestamp: '1小时前',
-        color: '#3f51b5',
-    },
-    {
-        content: '退款申请',
-        description: 'xxx申请了仅退款，又要亏钱了',
-        timestamp: '15小时前',
-        color: '#f44336',
-    },
-    {
-        content: '商品上架',
-        description: '运营专员瞒着你上架了一辆飞机',
-        timestamp: '1天前',
-        color: '#009688',
-    },
-];
+import {onMounted,ref} from 'vue'
+import {getStatisticsApi} from '@/api'
 
-const ranks = [
-    {
-        title: '手机',
-        value: 10000,
-        percent: 80,
-        color: '#f25e43',
-    },
-    {
-        title: '电脑',
-        value: 8000,
-        percent: 70,
-        color: '#00bcd4',
-    },
-    {
-        title: '相机',
-        value: 6000,
-        percent: 60,
-        color: '#64d572',
-    },
-    {
-        title: '衣服',
-        value: 5000,
-        percent: 55,
-        color: '#e9a745',
-    },
-    {
-        title: '书籍',
-        value: 4000,
-        percent: 50,
-        color: '#009688',
-    },
-];
+interface PageData{
+  totalWithDrawl: number,
+  totalUser: number,
+  todayRecharge: number,
+  todayWithDrawl: number,
+  totalRecharge: number
+}
+const totalWithDrawl = ref(0)
+const totalUser = ref(0)
+const todayRecharge = ref(0)
+const todayWithDrawl = ref(0)
+const totalRecharge = ref(0)
+
+
+onMounted(()=>{
+  getStatisticsApi().then(res=>{
+    todayWithDrawl.value = res.data.todayWithDrawl
+    totalWithDrawl.value = res.data.totalWithDrawl
+    totalUser.value = res.data.totalUser
+    todayRecharge.value = res.data.todayRecharge
+    totalRecharge.value = res.data.totalRecharge
+  })
+})
+
+
+
 </script>
 
 <style>
