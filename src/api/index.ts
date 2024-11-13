@@ -45,3 +45,19 @@ export const getRechargeWithdrawApi = (data: any) => {
         data
     });
 };
+//获取全部用户信息
+export const getAllUserApi = (data: any) => {
+    return request({
+        url: '/scf/mis/getAlluser',
+        method: 'post',
+        data
+    });
+};
+//获取异常数据
+export const getAbnormalApi = (data: any) => {
+    return request({
+        url: '/scf/mis/getErrorRecord',
+        method: 'post',
+        data
+    });
+};

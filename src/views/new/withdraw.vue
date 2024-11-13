@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {getRechargeWithdrawApi} from '@/api'
+import {STATE_MAP} from './constant'
+import dayjs from 'dayjs'
 
 const createTime = ref([])
 const tableData = ref([])
@@ -25,11 +27,23 @@ const getData = () => {
   }
   getRechargeWithdrawApi(data).then(res=>{
     tableData.value = res.data.recordList
+    total.value = res.data.total
   })
 }
 
-onMounted(()=>{
+function handleQuery(){
+  pageNumber.value = 1
+  pageSize.value = 10
   getData()
+}
+
+function handleReset(){
+  createTime.value = []
+  handleQuery()
+}
+
+onMounted(()=>{
+  handleQuery()
 })
 
 </script>
@@ -39,20 +53,35 @@ onMounted(()=>{
   <div class="search-box">
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="提现时间">
-        <el-date-picker v-model="createTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+        <el-date-picker v-model="createTime" value-format="YYYYMMDD" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
       <el-form-item >
-        <el-button type="primary">查询</el-button>
-        <el-button >重置</el-button>
+        <el-button type="primary" @click="handleQuery">查询</el-button>
+        <el-button @click="handleReset">重置</el-button>
       </el-form-item>
     </el-form>
+<!--    账户，币种，数量，状态，提现卡号，提现银行，时间-->
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="date" label="Date" width="180" />
-      <el-table-column prop="name" label="Name" width="180" />
-      <el-table-column prop="address" label="Address" />
+      <el-table-column prop="email" label="账户" />
+      <el-table-column prop="tokenType" label="币种" />
+      <el-table-column prop="tokenNumber" label="数量" />
+      <el-table-column prop="state" label="状态">
+        <template #default="scope">
+          {{ STATE_MAP[scope.row.state] }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="bankNo" label="提现卡号" />
+      <el-table-column prop="bankName" label="提现银行" />
+      <el-table-column prop="address" label="时间">
+        <template #default="scope">
+          {{ dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+        </template>
+      </el-table-column>
     </el-table>
     <div class="page-box">
-      <el-pagination v-model:current-page="pageNumber" v-model:page-size="pageSize" background layout="prev, pager, next" :total="total" />
+      <el-pagination v-model:current-page="pageNumber" v-model:page-size="pageSize" background layout="pager" :total="total"
+      @current-change="getData"
+      />
     </div>
 
   </div>

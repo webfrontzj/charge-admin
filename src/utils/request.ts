@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import {useUserStore} from '@/store/user'
+import router from '@/router'
 
 const service: AxiosInstance = axios.create({
     timeout: 5000,
@@ -29,6 +30,10 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response: AxiosResponse) => {
         if (response.status === 200) {
+            if(response.data.code ==1){
+                router.push('/login')
+                return
+            }
             return response.data;
         } else {
             Promise.reject();
