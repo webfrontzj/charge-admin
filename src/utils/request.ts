@@ -3,7 +3,7 @@ import {useUserStore} from '@/store/user'
 import router from '@/router'
 
 const service: AxiosInstance = axios.create({
-    timeout: 5000,
+    timeout: 50000,
     baseURL: import.meta.env.VITE_APP_BASE_URL,
     withCredentials: true,
     headers: {

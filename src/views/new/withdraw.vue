@@ -3,6 +3,7 @@ import {onMounted, ref} from 'vue'
 import {getRechargeWithdrawApi,exportWithdrawApi} from '@/api'
 import {STATE_MAP} from './constant'
 import dayjs from 'dayjs'
+import {saveAs} from 'file-saver'
 
 const createTime = ref([])
 const tableData = ref([])
@@ -44,6 +45,10 @@ function handleExport(){
     data.createTimeEnd = ''
   }
   exportWithdrawApi(data).then(res=>{
+    console.log(res)
+    const blob = new Blob([res], { type: 'application/octet-stream' });
+
+    saveAs(blob, 'data.xlsx');
     alert('导出成功')
   })
 }

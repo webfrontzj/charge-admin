@@ -66,6 +66,7 @@ export const exportWithdrawApi = (data: any) => {
     return request({
         url: '/scf/mis/exportData',
         method: 'post',
+        responseType: 'blob',
         data
     });
 };
