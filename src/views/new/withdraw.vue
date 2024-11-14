@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-import {getRechargeWithdrawApi} from '@/api'
+import {getRechargeWithdrawApi,exportWithdrawApi} from '@/api'
 import {STATE_MAP} from './constant'
 import dayjs from 'dayjs'
 
@@ -30,7 +30,23 @@ const getData = () => {
     total.value = res.data.total
   })
 }
-
+function handleExport(){
+  let data = {
+    operationType:1,
+    createTimeBegin:'',
+    createTimeEnd:''
+  }
+  if(createTime.value.length){
+    data.createTimeBegin = createTime.value[0]
+    data.createTimeEnd = createTime.value[1]
+  }else{
+    data.createTimeBegin = ''
+    data.createTimeEnd = ''
+  }
+  exportWithdrawApi(data).then(res=>{
+    alert('导出成功')
+  })
+}
 function handleQuery(){
   pageNumber.value = 1
   pageSize.value = 10
@@ -58,6 +74,7 @@ onMounted(()=>{
       <el-form-item >
         <el-button type="primary" @click="handleQuery">查询</el-button>
         <el-button @click="handleReset">重置</el-button>
+        <el-button type="warning" @click="handleExport">导出</el-button>
       </el-form-item>
     </el-form>
 <!--    账户，币种，数量，状态，提现卡号，提现银行，时间-->

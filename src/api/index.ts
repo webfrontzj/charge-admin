@@ -61,3 +61,11 @@ export const getAbnormalApi = (data: any) => {
         data
     });
 };
+//提现列表导出
+export const exportWithdrawApi = (data: any) => {
+    return request({
+        url: '/scf/mis/exportData',
+        method: 'post',
+        data
+    });
+};
