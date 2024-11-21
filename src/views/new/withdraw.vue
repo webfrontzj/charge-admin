@@ -46,6 +46,7 @@ function handleExport(){
   }
   exportWithdrawApi(data).then(res=>{
     console.log(res)
+    //@ts-ignore
     const blob = new Blob([res], { type: 'application/octet-stream' });
 
     saveAs(blob, 'data.xlsx');
