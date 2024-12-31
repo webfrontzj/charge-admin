@@ -31,6 +31,12 @@ export const menuData: Menus[] = [
         index: '/abnormal',
         icon: 'Odometer',
     },
+    {
+        id: '5',
+        title: '认证审核',
+        index: '/audit',
+        icon: 'Odometer',
+    },
     // {
     //     id: '1',
     //     title: '系统管理',

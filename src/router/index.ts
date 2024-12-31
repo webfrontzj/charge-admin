@@ -55,6 +55,14 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import('../views/new/abnormal.vue'),
             },
+            {
+                path: '/audit',
+                name: 'audit',
+                meta: {
+                    title: '认证审核',
+                },
+                component: () => import('../views/new/audit.vue'),
+            },
             // {
             //     path: '/system-user',
             //     name: 'system-user',
