@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 import dayjs from 'dayjs'
+import {auditApi, getAuditApi} from '@/api'
 
 const tableData = ref([{}])
 const pageNumber = ref(1)
@@ -10,23 +11,70 @@ const total = ref(0)
 const pageSize = ref(10)
 
 const getData = () => {
+  let data = {
+    pageNumber:pageNumber.value,
+    pageSize:pageSize.value,
+  }
 
+  getAuditApi(data).then(res=>{
+    tableData.value = res.data.userList
+    total.value = res.data.total
+  })
 }
 
-function handleAbort(){
+function handleQuery(){
+  pageNumber.value = 1
+  pageSize.value = 10
+  getData()
+}
+
+onMounted(()=>{
+  handleQuery()
+})
+
+
+function handleAbort(userId){
   ElMessageBox.prompt('请输入驳回原因', '审核驳回', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
   })
     .then(({ value }) => {
-      ElMessage({
-        type: 'success',
-        message: `操作成功`,
-      })
+      if(!value){
+        ElMessage({
+          type: 'error',
+          message: `请输入驳回原因`,
+        })
+        return
+      }
+      handleAudit(userId,2,value)
     })
     .catch(() => {
 
     })
+}
+
+function handleAudit(userId,state,remark){
+  const data = {
+    userId,
+    state,
+  }
+  if(state == 2){
+    data.remark = remark;
+  }
+  auditApi(data).then(res=>{
+    if(res.code == 200){
+      ElMessage({
+        type: 'success',
+        message: `操作成功`,
+      })
+      getData()
+    }else{
+      ElMessage({
+        type: 'error',
+        message: `操作失败`,
+      })
+    }
+  })
 }
 </script>
 
@@ -47,29 +95,41 @@ function handleAbort(){
         <el-table-column type="index" label="序号" width="60" />
         <el-table-column prop="email" label="账户" />
         <el-table-column prop="userName" label="用户名" />
+        <el-table-column prop="idCard" label="身份证号" />
+        <el-table-column prop="usefulLife" label="身份证有效期" />
         <el-table-column label="身份证照片">
           <template v-slot="scope">
             <el-image
               fit="contain"
               style="width: 70px; height: 70px"
-              :src="scope.row.idCardPhoto"
-              :preview-src-list="[scope.row.idCardPhoto]"
+              :src="scope.row.idCardFront"
+              :preview-src-list="[scope.row.idCardFront]"
+              preview-teleported
             />
             <el-image
               fit="contain"
               style="width: 70px; height: 70px;margin-left:10px"
-              :src="scope.row.idCardPhoto"
-              :preview-src-list="[scope.row.idCardPhoto]"
+              :src="scope.row.idCardBack"
+              :preview-src-list="[scope.row.idCardBack]"
+              preview-teleported
             />
           </template>
         </el-table-column>
         <el-table-column label="签名">
-          <template v-slot="scope"></template>
+          <template v-slot="scope">
+            <el-image
+              fit="contain"
+              style="width: 70px; height: 70px;margin-left:10px"
+              :src="scope.row.contractUrl"
+              :preview-src-list="[scope.row.contractUrl]"
+              preview-teleported
+            />
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="200">
           <template v-slot="scope">
-            <el-button type="primary" link >审核通过</el-button>
-            <el-button type="primary" link @click="handleAbort">审核驳回</el-button>
+            <el-button type="primary" link @click="handleAudit(scope.row.userId,1)">审核通过</el-button>
+            <el-button type="primary" link @click="handleAbort(scope.row.userId)">审核驳回</el-button>
           </template>
         </el-table-column>
 

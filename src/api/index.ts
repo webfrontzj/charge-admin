@@ -70,3 +70,21 @@ export const exportWithdrawApi = (data: any) => {
         data
     });
 };
+
+//审核列表
+export const getAuditApi = (data: any) => {
+    return request({
+        url: '/scf/mis/getAuditInfo',
+        method: 'post',
+        data
+    });
+};
+
+// 用户审核
+export const auditApi = (data: any) => {
+    return request({
+        url: '/scf/mis/auditUser',
+        method: 'post',
+        data
+    });
+};
