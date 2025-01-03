@@ -57,23 +57,17 @@ function handleAudit(userId,state,remark){
   const data = {
     userId,
     state,
+    remark:null,
   }
   if(state == 2){
     data.remark = remark;
   }
   auditApi(data).then(res=>{
-    if(res.code == 200){
-      ElMessage({
-        type: 'success',
-        message: `操作成功`,
-      })
-      getData()
-    }else{
-      ElMessage({
-        type: 'error',
-        message: `操作失败`,
-      })
-    }
+    ElMessage({
+      type: 'success',
+      message: `操作成功`,
+    })
+    getData()
   })
 }
 </script>
@@ -128,7 +122,7 @@ function handleAudit(userId,state,remark){
         </el-table-column>
         <el-table-column label="操作" width="200">
           <template v-slot="scope">
-            <el-button type="primary" link @click="handleAudit(scope.row.userId,1)">审核通过</el-button>
+            <el-button type="primary" link @click="handleAudit(scope.row.userId,1,null)">审核通过</el-button>
             <el-button type="primary" link @click="handleAbort(scope.row.userId)">审核驳回</el-button>
           </template>
         </el-table-column>
