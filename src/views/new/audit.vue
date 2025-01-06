@@ -53,6 +53,24 @@ function handleAbort(userId){
     })
 }
 
+function handlePass(userId){
+  ElMessageBox.confirm(
+    '确认要审核通过吗?',
+    '提示',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      handleAudit(userId,1,null)
+    })
+    .catch(() => {
+
+    })
+}
+
 function handleAudit(userId,state,remark){
   const data = {
     userId,
@@ -122,7 +140,7 @@ function handleAudit(userId,state,remark){
         </el-table-column>
         <el-table-column label="操作" width="200">
           <template v-slot="scope">
-            <el-button type="primary" link @click="handleAudit(scope.row.userId,1,null)">审核通过</el-button>
+            <el-button type="primary" link @click="handlePass(scope.row.userId)">审核通过</el-button>
             <el-button type="primary" link @click="handleAbort(scope.row.userId)">审核驳回</el-button>
           </template>
         </el-table-column>

@@ -70,9 +70,9 @@ onMounted(()=>{
             {{ USER_AUTH_MAP[scope.row.userStatus] }}
           </template>
         </el-table-column>
-        <el-table-column prop="userStatus" label="审核状态">
+        <el-table-column label="审核状态">
           <template #default="scope">
-            {{ scope.row.state == 0 ? '待审核' : scope.row.state == 1 ? '审核通过' : '审核驳回' }}
+            {{ scope.row.state == 0 ? '待审核' : (scope.row.state == 1 ? '审核通过' : (scope.row.state == 2 ? '审核驳回' : '/' )) }}
           </template>
         </el-table-column>
         <el-table-column prop="remark" label="驳回原因" />
