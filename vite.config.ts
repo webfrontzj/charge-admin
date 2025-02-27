@@ -22,8 +22,8 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				// target: 'http://msb.free.svipss.top',
-				target: 'http://mis.esalary.pro',
+				target: 'http://scf.free.svipss.top',
+				// target: 'http://mis.esalary.pro',
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, '')
 			}

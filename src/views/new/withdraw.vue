@@ -85,17 +85,22 @@ onMounted(()=>{
     </el-form>
 <!--    账户，币种，数量，状态，提现卡号，提现银行，时间-->
     <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="email" label="账户" />
+      <el-table-column prop="email" label="账户" min-width="120"/>
       <el-table-column prop="tokenType" label="币种" />
-      <el-table-column prop="tokenNumber" label="数量" />
+      <el-table-column prop="tokenNumber" label="数量" min-width="80"/>
       <el-table-column prop="state" label="状态">
         <template #default="scope">
           {{ STATE_MAP[scope.row.state] }}
         </template>
       </el-table-column>
-      <el-table-column prop="bankNo" label="提现卡号" />
+      <el-table-column label="审核状态">
+          <template #default="scope">
+            {{ scope.row.authState == 0 ? '待审核' : (scope.row.authState == 1 ? '审核通过' : (scope.row.authState == 2 ? '审核驳回' : '/' )) }}
+          </template>
+        </el-table-column>
+      <el-table-column prop="bankNo" label="提现卡号" min-width="120"/>
       <el-table-column prop="bankName" label="提现银行" />
-      <el-table-column prop="address" label="时间">
+      <el-table-column prop="address" label="时间" min-width="120">
         <template #default="scope">
           {{ dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
