@@ -88,3 +88,39 @@ export const auditApi = (data: any) => {
         data
     });
 };
+
+//异常充值-通过
+export const passRechargeApi = (data: any) => {
+    return request({
+        url: '/scf/mis/agreeErrorRecord',
+        method: 'post',
+        data
+    });
+};
+
+//异常充值-拒绝
+export const rejectRechargeApi = (data: any) => {
+    return request({
+        url: '/scf/mis/refuseErrorRecord',
+        method: 'post',
+        data
+    });
+};
+
+//提现记录-同意
+export const passWithdrawApi = (data: any) => {
+    return request({
+        url: '/scf/mis/agreeWithDrawl',
+        method: 'post',
+        data
+    });
+};
+
+//提现记录-拒绝
+export const rejectWithdrawApi = (data: any) => {
+    return request({
+        url: '/scf/mis/refuseWithDrawl',
+        method: 'post',
+        data
+    });
+};

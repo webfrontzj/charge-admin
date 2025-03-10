@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-import {getRechargeWithdrawApi,exportWithdrawApi} from '@/api'
+import {getRechargeWithdrawApi,exportWithdrawApi,passWithdrawApi,rejectWithdrawApi} from '@/api'
 import {STATE_MAP} from './constant'
 import dayjs from 'dayjs'
 import {saveAs} from 'file-saver'
+import { ElMessageBox,ElMessage } from 'element-plus'
 
 const createTime = ref([])
+const state = ref()
 const tableData = ref([])
 const pageNumber = ref(1)
 const total = ref(0)
@@ -16,6 +18,7 @@ const getData = () => {
     operationType:1,
     pageNumber:pageNumber.value,
     pageSize:pageSize.value,
+    state:state.value,
     createTimeBegin:'',
     createTimeEnd:''
   }
@@ -35,7 +38,8 @@ function handleExport(){
   let data = {
     operationType:1,
     createTimeBegin:'',
-    createTimeEnd:''
+    createTimeEnd:'',
+    state:state.value,
   }
   if(createTime.value.length){
     data.createTimeBegin = createTime.value[0]
@@ -61,6 +65,7 @@ function handleQuery(){
 
 function handleReset(){
   createTime.value = []
+  state.value = ''
   handleQuery()
 }
 
@@ -68,12 +73,51 @@ onMounted(()=>{
   handleQuery()
 })
 
+function handleAudit(id,type){
+  if(type == 'pass'){
+    ElMessageBox.confirm('确定通过该提现申请吗?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(() => {
+      passWithdrawApi({id}).then(res=>{
+        ElMessage({
+          type: 'success',
+          message: '操作成功!',
+        })
+        getData()
+      })
+    }).catch(() => {
+    });
+  }else if(type == 'reject'){
+    ElMessageBox.prompt('请输入驳回原因', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(({ value }) => {
+      rejectWithdrawApi({id,stateRemark:value}).then(res=>{
+        ElMessage({
+          type:'success',
+          message: '操作成功!',
+        })
+        getData()
+      })
+    }).catch(() => {
+    });
+  }
+}
+
 </script>
 
 <template>
 <div class="page-container">
   <div class="search-box">
     <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="提现状态">
+        <el-select v-model="state" placeholder="请选择状态" style="width:150px">
+          <el-option v-for="(item,index) in STATE_MAP" :key="index" :label="item" :value="index"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="提现时间">
         <el-date-picker v-model="createTime" value-format="YYYYMMDD" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
@@ -93,7 +137,7 @@ onMounted(()=>{
           {{ STATE_MAP[scope.row.state] }}
         </template>
       </el-table-column>
-      <el-table-column label="审核状态">
+      <el-table-column label="用户审核状态" min-width="120">
           <template #default="scope">
             {{ scope.row.authState == 0 ? '待审核' : (scope.row.authState == 1 ? '审核通过' : (scope.row.authState == 2 ? '审核驳回' : '/' )) }}
           </template>
@@ -105,6 +149,12 @@ onMounted(()=>{
           {{ dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
+      <el-table-column label="操作" min-width="120">
+          <template v-slot="scope">
+            <el-button type="primary" link @click="handleAudit(scope.row.id,'pass')">通过</el-button>
+            <el-button type="primary" link @click="handleAudit(scope.row.id,'reject')">拒绝</el-button>
+          </template>
+        </el-table-column>
     </el-table>
     <div class="page-box">
       <el-pagination v-model:current-page="pageNumber" v-model:page-size="pageSize" background layout="pager" :total="total"

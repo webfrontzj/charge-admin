@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-import {getAbnormalApi} from '@/api'
+import {getAbnormalApi,passRechargeApi,rejectRechargeApi} from '@/api'
 import {STATE_MAP} from './constant'
 import dayjs from 'dayjs'
+import {ElMessageBox,ElMessage} from 'element-plus'
 
 const createTime = ref([])
 const tableData = ref([])
@@ -42,6 +43,52 @@ function handleReset(){
   handleQuery()
 }
 
+function handleAudit(id,type){
+  if(type == 'pass'){
+    ElMessageBox.confirm(
+      '确认要审核通过吗?',
+      '提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    )
+      .then(() => {
+        passRechargeApi({
+          id
+        }).then(res=>{
+          ElMessage({
+            type: 'success',
+            message: '操作成功!',
+          })
+          getData()
+        })
+      })
+  }else if(type == 'reject'){
+    ElMessageBox.confirm(
+      '确认要审核拒绝吗?',
+      '提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    )
+      .then(() => {
+        rejectRechargeApi({
+          id
+        }).then(res=>{
+          ElMessage({
+            type: 'success',
+            message: '操作成功!',
+          })
+          getData()
+        })
+      })
+  }
+}
+
 onMounted(()=>{
   handleQuery()
 })
@@ -62,7 +109,7 @@ onMounted(()=>{
       </el-form>
       <!--    账户，币种，数量，状态，提现卡号，提现银行，时间-->
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="email" label="账户" />
+        <el-table-column prop="email" label="账户" min-width="140"/>
         <el-table-column prop="tokenType" label="币种" />
         <el-table-column prop="tokenNumber" label="数量" />
         <el-table-column prop="chainType" label="主网类型">
@@ -75,9 +122,16 @@ onMounted(()=>{
             {{ STATE_MAP[scope.row.state] }}
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="时间">
+        <el-table-column prop="stateRemark" label="异常原因" />
+        <el-table-column prop="address" label="时间" min-width="120">
           <template #default="scope">
             {{ dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" min-width="120">
+          <template v-slot="scope">
+            <el-button type="primary" link @click="handleAudit(scope.row.id,'pass')">通过</el-button>
+            <el-button type="primary" link @click="handleAudit(scope.row.id,'reject')">拒绝</el-button>
           </template>
         </el-table-column>
       </el-table>

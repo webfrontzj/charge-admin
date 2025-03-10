@@ -1,7 +1,8 @@
 export const STATE_MAP = [
-    '进行中',
-    '已完成',
-    '异常'
+    '提现中',
+    '打款成功',
+    '打款失败',
+    '打款中'
 ]
 
 const USER_AUTH_MAP = []

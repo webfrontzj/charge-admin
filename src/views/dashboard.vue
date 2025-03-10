@@ -58,6 +58,39 @@
               </div>
             </el-card>
           </el-col>
+          <el-col :span="6">
+            <el-card shadow="hover" body-class="card-body">
+              <el-icon class="card-icon bg4">
+                <ShoppingCartFull />
+              </el-icon>
+              <div class="card-content">
+                <span class="card-num color4">{{totalSheng}}</span>
+                <div>当前平台剩余金额</div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="6">
+            <el-card shadow="hover" body-class="card-body">
+              <el-icon class="card-icon bg4">
+                <ShoppingCartFull />
+              </el-icon>
+              <div class="card-content">
+                <span class="card-num color4">{{totalRechargeSuc}}</span>
+                <div>平台充值总金额</div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="6">
+            <el-card shadow="hover" body-class="card-body">
+              <el-icon class="card-icon bg4">
+                <ShoppingCartFull />
+              </el-icon>
+              <div class="card-content">
+                <span class="card-num color4">{{totalWithDrawlSuc}}</span>
+                <div>平台提现总金额</div>
+              </div>
+            </el-card>
+          </el-col>
         </el-row>
 
 
@@ -74,13 +107,19 @@ interface PageData{
   totalUser: number,
   todayRecharge: number,
   todayWithDrawl: number,
-  totalRecharge: number
+  totalRecharge: number,
+  totalSheng: number,
+  totalRechargeSuc: number,
+  totalWithDrawlSuc: number
 }
 const totalWithDrawl = ref(0)
 const totalUser = ref(0)
 const todayRecharge = ref(0)
 const todayWithDrawl = ref(0)
 const totalRecharge = ref(0)
+const totalSheng = ref(0)
+const totalRechargeSuc=ref(0)
+const totalWithDrawlSuc=ref(0)
 
 
 onMounted(()=>{
@@ -90,6 +129,9 @@ onMounted(()=>{
     totalUser.value = res.data.totalUser
     todayRecharge.value = res.data.todayRecharge
     totalRecharge.value = res.data.totalRecharge
+    totalSheng.value = res.data.totalSheng
+    totalRechargeSuc.value = res.data.totalRechargeSuc
+    totalWithDrawlSuc.value = res.data.totalWithDrawlSuc
   })
 })
 
