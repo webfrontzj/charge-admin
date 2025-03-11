@@ -5,6 +5,12 @@ export const STATE_MAP = [
     '打款中'
 ]
 
+export const CHARGE_STATE_MAP = [
+    '处理中',
+    '成功',
+    '异常',
+]
+
 const USER_AUTH_MAP = []
 USER_AUTH_MAP["0"]="初始"
 USER_AUTH_MAP["1"]="基本认证"

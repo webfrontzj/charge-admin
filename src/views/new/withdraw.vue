@@ -151,8 +151,8 @@ function handleAudit(id,type){
       </el-table-column>
       <el-table-column label="操作" min-width="120">
           <template v-slot="scope">
-            <el-button type="primary" link @click="handleAudit(scope.row.id,'pass')">通过</el-button>
-            <el-button type="primary" link @click="handleAudit(scope.row.id,'reject')">拒绝</el-button>
+            <el-button type="primary" link :disabled="scope.row.state == 1 || scope.row.state == 2" @click="handleAudit(scope.row.id,'pass')">通过</el-button>
+            <el-button type="primary" link :disabled="scope.row.state == 1 || scope.row.state == 2" @click="handleAudit(scope.row.id,'reject')">拒绝</el-button>
           </template>
         </el-table-column>
     </el-table>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-import {getAbnormalApi,passRechargeApi,rejectRechargeApi} from '@/api'
-import {STATE_MAP} from './constant'
+import {getAbnormalApi,passRechargeApi,rejectRechargeApi,getRechargeApi} from '@/api'
+import {CHARGE_STATE_MAP} from './constant'
 import dayjs from 'dayjs'
 import {ElMessageBox,ElMessage} from 'element-plus'
 
@@ -93,6 +93,13 @@ onMounted(()=>{
   handleQuery()
 })
 
+
+function handleSee(id){
+  getRechargeApi({id}).then(res=>{
+    ElMessageBox.alert(res.data.date,'提示')
+  })
+}
+
 </script>
 
 <template>
@@ -119,7 +126,7 @@ onMounted(()=>{
         </el-table-column>
         <el-table-column prop="state" label="状态">
           <template #default="scope">
-            {{ STATE_MAP[scope.row.state] }}
+            {{ CHARGE_STATE_MAP[scope.row.state] }}
           </template>
         </el-table-column>
         <el-table-column prop="stateRemark" label="异常原因" />
@@ -130,6 +137,7 @@ onMounted(()=>{
         </el-table-column>
         <el-table-column label="操作" min-width="120">
           <template v-slot="scope">
+            <el-button type="primary" link @click="handleSee(scope.row.id)">查询</el-button>
             <el-button type="primary" link @click="handleAudit(scope.row.id,'pass')">通过</el-button>
             <el-button type="primary" link @click="handleAudit(scope.row.id,'reject')">拒绝</el-button>
           </template>

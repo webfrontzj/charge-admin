@@ -88,6 +88,14 @@ export const auditApi = (data: any) => {
         data
     });
 };
+//异常充值-查询
+export const getRechargeApi = (data: any) => {
+    return request({
+        url: '/scf/mis/getResultInfo',
+        method: 'post',
+        data
+    });
+};
 
 //异常充值-通过
 export const passRechargeApi = (data: any) => {
