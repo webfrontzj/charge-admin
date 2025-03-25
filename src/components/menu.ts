@@ -37,6 +37,12 @@ export const menuData: Menus[] = [
         index: '/audit',
         icon: 'Odometer',
     },
+    {
+        id: '6',
+        title: '奖励提现',
+        index: '/withdraw-rewards',
+        icon: 'Odometer',
+    },
     // {
     //     id: '1',
     //     title: '系统管理',

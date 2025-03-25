@@ -132,3 +132,21 @@ export const rejectWithdrawApi = (data: any) => {
         data
     });
 };
+
+//奖励提现-同意
+export const passRewardsWithdrawApi = (data: any) => {
+    return request({
+        url: '/scf/mis/agreeWithDrawlToken',
+        method: 'post',
+        data
+    });
+};
+
+//奖励提现-拒绝
+export const rejectRewardsWithdrawApi = (data: any) => {
+    return request({
+        url: '/scf/mis/refuseWithDrawlToken',
+        method: 'post',
+        data
+    });
+};

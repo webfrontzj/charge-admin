@@ -5,6 +5,12 @@ export const STATE_MAP = [
     '打款中'
 ]
 
+export const REWARDS_STATE_MAP = [
+    '提现中',
+    '打款成功',
+    '打款失败',
+]
+
 export const CHARGE_STATE_MAP = [
     '处理中',
     '成功',

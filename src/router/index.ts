@@ -32,6 +32,14 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('../views/new/withdraw.vue'),
             },
             {
+                path: '/withdraw-rewards',
+                name: 'withdraw-rewards',
+                meta: {
+                    title: '奖励提现',
+                },
+                component: () => import('../views/new/withdraw-rewards.vue'),
+            },
+            {
                 path: '/recharge',
                 name: 'recharge',
                 meta: {
