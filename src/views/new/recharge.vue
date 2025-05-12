@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {getRechargeWithdrawApi} from '@/api'
-import {STATE_MAP} from './constant'
+import {STATE_MAP,RECHARGE_STATE_MAP} from './constant'
 import dayjs from 'dayjs'
 
 const createTime = ref([])
@@ -72,7 +72,7 @@ onMounted(()=>{
         </el-table-column>
         <el-table-column prop="state" label="状态">
           <template #default="scope">
-            {{ STATE_MAP[scope.row.state] }}
+            {{ RECHARGE_STATE_MAP[scope.row.state] }}
           </template>
         </el-table-column>
         <el-table-column prop="address" label="时间">

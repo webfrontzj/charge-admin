@@ -17,6 +17,14 @@ export const CHARGE_STATE_MAP = [
     '异常',
 ]
 
+export const RECHARGE_STATE_MAP = [
+    '',
+    '充值成功',
+    '充值异常',
+    '',
+    '充值审核拒绝'
+]
+
 const USER_AUTH_MAP = []
 USER_AUTH_MAP["0"]="初始"
 USER_AUTH_MAP["1"]="基本认证"

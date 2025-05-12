@@ -23,8 +23,8 @@ export default defineConfig({
 		proxy: {
 			'/api': {
 				// target: 'http://scf.free.svipss.top',
-				// target: 'http://mis.esalary.pro',
-				target: 'http://scf.l2.bb1a.cn',
+				target: 'http://mis.esalary.pro',
+				// target: 'http://scf.l2.bb1a.cn',
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, '')
 			}
